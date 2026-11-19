@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827"><title>Mangal AI Movie Maker</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#f7f9fc;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
+header{padding:18px;background:linear-gradient(135deg,#172944,#101827);border-bottom:1px solid #26364d}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border-radius:14px;background:#31558a;display:grid;place-items:center;font-size:24px}
+h1{font-size:18px;margin:0}.sub{font-size:11px;color:#b8c7dc;margin-top:3px}
+main{max-width:720px;margin:auto;padding:16px}.hero,.panel{border:1px solid #2a3b54;border-radius:17px;padding:17px;background:#172338;margin-bottom:14px}
+.hero{background:linear-gradient(135deg,#203b60,#172338)}h2{margin:0 0 8px;font-size:22px}.muted{color:#c6d4e8;font-size:13px;line-height:1.6}
+.tag{display:inline-block;background:#173e36;color:#9df0c9;padding:5px 10px;border-radius:20px;font-size:11px;margin-top:10px}
+label{display:block;margin:13px 0 6px;font-size:13px;color:#d5e0ee}
+textarea,select{width:100%;background:#0b1525;color:white;border:1px solid #344963;border-radius:10px;padding:12px;font:inherit}
+textarea{min-height:110px;resize:vertical}button{width:100%;background:#5a8fe5;color:#fff;border:0;border-radius:11px;padding:13px;font-size:15px;font-weight:700;margin-top:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.tile{background:#22334b;padding:13px;border-radius:12px;border:1px solid #344963}.tile b{display:block;font-size:13px}.tile small{color:#c3d1e3;font-size:11px}
+.status{background:#0b1525;border:1px solid #344963;border-radius:10px;padding:11px;margin-top:12px;color:#c6d4e8;font-size:12px;line-height:1.5}
+.lang{display:flex;gap:8px;margin-top:12px}.lang button{margin:0;background:#263c60;padding:9px;font-size:13px}.lang button.active{background:#28795d}
+footer{text-align:center;color:#8496ad;font-size:11px;padding:16px}
+</style></head>
+<body>
+<header><div class="brand"><div class="logo">🎬</div><div><h1>MANGAL AI MOVIE MAKER</h1><div class="sub">AUTO MOVIE STUDIO · PROTOTYPE v0.2</div></div></div>
+<div class="lang"><button class="active" onclick="setLang('বাংলা',this)">বাংলা</button><button onclick="setLang('English',this)">English</button><button onclick="setLang('हिन्दी',this)">हिन्दी</button></div></header>
+<main>
+<section class="hero"><h2>গল্প লিখুন, সিনেমা তৈরি করুন</h2><div class="muted">AI আপনার গল্প থেকে স্ক্রিপ্ট, Scene plan, চরিত্র, সংলাপ ও এডিটিংয়ের খসড়া সাজাবে।</div><span class="tag">AUTO MOVIE GENERATION</span></section>
+<section class="panel"><h3 style="margin:0 0 12px">নতুন সিনেমা</h3>
+<label for="story">আপনার গল্প লিখুন</label><textarea id="story" placeholder="যেমন: পল্টু গ্রামের গোয়েন্দা হয়ে একটি রহস্য সমাধান করছে..."></textarea>
+<div class="grid">
+<div><label for="duration">সিনেমার দৈর্ঘ্য</label><select id="duration"><option>১৫ মিনিট</option><option selected>২০ মিনিট</option></select></div>
+<div><label for="genre">সিনেমার ধরন</label><select id="genre"><option>কমেডি</option><option>রহস্য / থ্রিলার</option><option>ভৌতিক</option><option>রোমান্টিক</option><option>অ্যাকশন</option><option>ড্রামা</option></select></div>
+<div><label for="language">সিনেমার ভাষা</label><select id="language"><option>বাংলা</option><option>English</option><option>हिन्दी</option></select></div>
+<div><label for="ratio">ভিডিও ফরম্যাট</label><select id="ratio"><option>16:9 — YouTube Movie</option><option>9:16 — Shorts / Reels</option></select></div>
+</div>
+<button onclick="makePlan()">Auto Movie Plan তৈরি করো</button>
+<div id="status" class="status">প্রোটোটাইপ: এখানে এখন Project Plan-এর ডেমো দেখানো হবে। বাস্তব AI ভিডিও তৈরির সার্ভার এখনো সংযুক্ত নয়।</div>
+</section>
+<section class="panel"><h3 style="margin:0 0 12px">একই অ্যাপে এডিটিং</h3><div class="grid">
+<div class="tile">✂️ <b>Cut & Trim</b><small>ক্লিপ কাটা</small></div><div class="tile">🎞️ <b>Merge & Transition</b><small>ক্লিপ জোড়া ও দৃশ্য বদল</small></div>
+<div class="tile">🎙️ <b>Voice & Music</b><small>ডায়ালগ ও ব্যাকগ্রাউন্ড অডিও</small></div><div class="tile">💬 <b>Subtitle</b><small>তিন ভাষায় সাবটাইটেল</small></div>
+</div></section>
+<footer>© Mangal AI Movie Maker · UI prototype only</footer>
+</main>
+<script>
+function setLang(lang,btn){document.querySelectorAll('.lang button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById('status').textContent='অ্যাপের নির্বাচিত ভাষা: '+lang+'। পূর্ণ UI অনুবাদ পরবর্তী উন্নয়নে যুক্ত হবে।'}
+function makePlan(){let s=document.getElementById('story').value.trim();let d=document.getElementById('duration').value;let g=document.getElementById('genre').value;let l=document.getElementById('language').value;let r=document.getElementById('ratio').value;let el=document.getElementById('status');if(!s){el.textContent='আগে গল্প লিখুন।';return;}el.textContent='Project draft প্রস্তুত: '+d+' | ধরন: '+g+' | ভাষা: '+l+' | ফরম্যাট: '+r+'। পরবর্তী সংস্করণে AI গল্পকে Scene-এ ভাগ করবে। বাস্তব ভিডিও জেনারেশনের জন্য অনলাইন AI সার্ভার সংযোগ প্রয়োজন।'}
+</script></body></html>
