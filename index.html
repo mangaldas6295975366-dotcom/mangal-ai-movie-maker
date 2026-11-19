@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101827"><title>Mangal AI Movie Maker</title>
+<meta name="theme-color" content="#101827"><meta name="description" content="Mangal AI Movie Maker - Bengali, English and Hindi movie studio"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><title>Mangal AI Movie Maker</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0b1220;color:#f7f9fc;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
 header{padding:18px;background:linear-gradient(135deg,#172944,#101827);border-bottom:1px solid #26364d}
@@ -23,6 +23,7 @@ footer{text-align:center;color:#8496ad;font-size:11px;padding:16px}
 <header><div class="brand"><div class="logo">🎬</div><div><h1>MANGAL AI MOVIE MAKER</h1><div class="sub">AUTO MOVIE STUDIO · PROTOTYPE v0.2</div></div></div>
 <div class="lang"><button class="active" onclick="setLang('বাংলা',this)">বাংলা</button><button onclick="setLang('English',this)">English</button><button onclick="setLang('हिन्दी',this)">हिन्दी</button></div></header>
 <main>
+<section class="panel"><button id="installApp" onclick="installApp()" hidden>📲 মোবাইলে অ্যাপ ইনস্টল করুন</button><div class="muted">এই ওয়েব অ্যাপটি সমর্থিত ব্রাউজারে হোম স্ক্রিনে ইনস্টল করা যাবে।</div></section>
 <section class="hero"><h2>গল্প লিখুন, সিনেমা তৈরি করুন</h2><div class="muted">AI আপনার গল্প থেকে স্ক্রিপ্ট, Scene plan, চরিত্র, সংলাপ ও এডিটিংয়ের খসড়া সাজাবে।</div><span class="tag">AUTO MOVIE GENERATION</span></section>
 <section class="panel"><h3 style="margin:0 0 12px">নতুন সিনেমা</h3>
 <label for="story">আপনার গল্প লিখুন</label><textarea id="story" placeholder="যেমন: পল্টু গ্রামের গোয়েন্দা হয়ে একটি রহস্য সমাধান করছে..."></textarea>
@@ -43,5 +44,7 @@ footer{text-align:center;color:#8496ad;font-size:11px;padding:16px}
 </main>
 <script>
 function setLang(lang,btn){document.querySelectorAll('.lang button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById('status').textContent='অ্যাপের নির্বাচিত ভাষা: '+lang+'। পূর্ণ UI অনুবাদ পরবর্তী উন্নয়নে যুক্ত হবে।'}
+if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(err => console.log('Service worker:', err))); }
+let deferredInstallPrompt; window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); deferredInstallPrompt = event; const b=document.getElementById('installApp'); if(b) b.hidden=false; }); async function installApp(){ if(!deferredInstallPrompt){ document.getElementById('status').textContent='Chrome মেনু (⋮) খুলে Install app বা Add to Home screen নির্বাচন করুন।'; return; } deferredInstallPrompt.prompt(); await deferredInstallPrompt.userChoice; deferredInstallPrompt=null; document.getElementById('installApp').hidden=true; }
 function makePlan(){let s=document.getElementById('story').value.trim();let d=document.getElementById('duration').value;let g=document.getElementById('genre').value;let l=document.getElementById('language').value;let r=document.getElementById('ratio').value;let el=document.getElementById('status');if(!s){el.textContent='আগে গল্প লিখুন।';return;}el.textContent='Project draft প্রস্তুত: '+d+' | ধরন: '+g+' | ভাষা: '+l+' | ফরম্যাট: '+r+'। পরবর্তী সংস্করণে AI গল্পকে Scene-এ ভাগ করবে। বাস্তব ভিডিও জেনারেশনের জন্য অনলাইন AI সার্ভার সংযোগ প্রয়োজন।'}
 </script></body></html>
