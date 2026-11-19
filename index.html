@@ -46,5 +46,49 @@ footer{text-align:center;color:#8496ad;font-size:11px;padding:16px}
 function setLang(lang,btn){document.querySelectorAll('.lang button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById('status').textContent='অ্যাপের নির্বাচিত ভাষা: '+lang+'। পূর্ণ UI অনুবাদ পরবর্তী উন্নয়নে যুক্ত হবে।'}
 if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(err => console.log('Service worker:', err))); }
 let deferredInstallPrompt; window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); deferredInstallPrompt = event; const b=document.getElementById('installApp'); if(b) b.hidden=false; }); async function installApp(){ if(!deferredInstallPrompt){ document.getElementById('status').textContent='Chrome মেনু (⋮) খুলে Install app বা Add to Home screen নির্বাচন করুন।'; return; } deferredInstallPrompt.prompt(); await deferredInstallPrompt.userChoice; deferredInstallPrompt=null; document.getElementById('installApp').hidden=true; }
-function makePlan(){let s=document.getElementById('story').value.trim();let d=document.getElementById('duration').value;let g=document.getElementById('genre').value;let l=document.getElementById('language').value;let r=document.getElementById('ratio').value;let el=document.getElementById('status');if(!s){el.textContent='আগে গল্প লিখুন।';return;}el.textContent='Project draft প্রস্তুত: '+d+' | ধরন: '+g+' | ভাষা: '+l+' | ফরম্যাট: '+r+'। পরবর্তী সংস্করণে AI গল্পকে Scene-এ ভাগ করবে। বাস্তব ভিডিও জেনারেশনের জন্য অনলাইন AI সার্ভার সংযোগ প্রয়োজন।'}
+
+async function makePlan() {
+  const story = document.getElementById("story").value.trim();
+  const duration = document.getElementById("duration").value;
+  const genre = document.getElementById("genre").value;
+  const language = document.getElementById("language").value;
+  const ratio = document.getElementById("ratio").value;
+  const status = document.getElementById("status");
+
+  if (!story) {
+    status.textContent = "আগে তোমার সিনেমার গল্প লেখো।";
+    return;
+  }
+
+  status.textContent = "AI তোমার সিনেমার স্ক্রিপ্ট তৈরি করছে... অপেক্ষা করো।";
+
+  try {
+    const response = await fetch(
+      "https://super-darkness-f750.mangaldas6295975366.workers.dev/",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: story +
+            "\nGenre: " + genre +
+            "\nDuration: " + duration +
+            "\nVideo format: " + ratio,
+          language: language
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.details || data.error || "AI error");
+    }
+
+    status.textContent = data.script || "AI কোনো স্ক্রিপ্ট ফেরত দেয়নি।";
+
+  } catch (error) {
+    status.textContent = "সমস্যা হয়েছে: " + error.message;
+  }
+}
+  el.textContent='Project draft প্রস্তুত: '+d+' | ধরন: '+g+' | ভাষা: '+l+' | ফরম্যাট: '+r+'। পরবর্তী সংস্করণে AI গল্পকে Scene-এ ভাগ করবে। বাস্তব ভিডিও জেনারেশনের জন্য অনলাইন AI সার্ভার সংযোগ প্রয়োজন।'}
 </script></body></html>
